@@ -5,4 +5,8 @@
      
      top -p $(pidof 进程名) 如:top -p $(pidof mongod) 
 
-> 2. 
+> 2. 搜索目录的文件内容中是否包括某个字符串
+
+     grep -r -n "内容" .
+
+     
