@@ -2,7 +2,7 @@
 
 ## 1. 添加mongodb签名到APT
 ```bash
-$ sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927
+$ sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv BC711F9BA15703C6
 ```
 
 ## 2.创建/etc/apt/sources.list.d/mongodb-org-3.4.list文件并写入命令
