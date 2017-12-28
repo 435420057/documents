@@ -13,4 +13,7 @@
 
    pid=3182
 
-> 3. 
+> 3. 如何将本地目录加载docker容器中
+  ```bash
+  $ docker run -d -p 8080:8080 -p 50000:50000 --name myjenkins -v E:/jenkins:/var/jenkins_home -t jenkins
+  ```
