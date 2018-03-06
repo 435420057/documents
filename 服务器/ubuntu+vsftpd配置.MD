@@ -31,6 +31,9 @@ local_umask=022
 ```bash
 $ sudo useradd -d /home/ftp -M ftpuser
 $ sudo passwd ftpuser
+
+# 将FTP帐户加入www-data组，这样nginx 和ftp都可以上传文件与访问
+$ sudo usermod -G www-data ftpuser 
 ```
 
 ## 调整文件夹权限
