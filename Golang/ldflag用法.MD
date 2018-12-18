@@ -37,10 +37,10 @@ format:
 	find . -type f -name \*.go | xargs gofmt -w
 
 deploy: debug
-	cp ../../bin/qjfeixiaoji.exe  //192.168.2.19/koalachess/qjfeixiaoji
+	cp ../../bin/x.exe  //192.168.x.x/x/x
 
 dptest: debug
-	cp ../../bin/qjfeixiaoji.exe  //192.168.2.19/koalachess/qjfeixiaoji/testsrv/
+	cp ../../bin/x.exe  //192.168.x.x/x/x/testsrv/
 
 dpall: deploy dptest
 
