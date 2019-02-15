@@ -325,3 +325,38 @@ db.order.aggregate([{
   }
 }]);
 ```
+
+
+那么我们如何加条件语句呢？ 看看下面这个查询：
+```javascript
+db.player.aggregate([
+{
+  $lookup:{
+    from:"club",
+    localField:"_id",
+    foreignField:"playerid",
+    as:"cmsta"
+  }
+},{
+  $unwind:{
+    path:"$cmsta",
+    preserveNullAndEmptyArrays:true,
+  }
+},
+{$addFields:{pid:"$cmsta.playerid", mid:"$cmsta._id"}}
+,
+{
+   $match:{pid:1003190, mid:6100}, // 条件匹配，分别匹配两张表的内容
+},{
+  $group:{
+    _id:"$_id",
+    nickname:{$first:"$nickname"},
+    headimgurl:{$first:"$headimgurl"},
+    name:{$first:"$cmsta.name"},
+    mid:{$first:"$cmsta._id"},
+  }
+}
+])
+```
+
+但是不得不说一句,如果真出现需要这样来查询数据，应该认真考虑一下自己的数据结构是否存在问题了,毕竟非关系数据这样操作成本是很高的。一但数据大了，会非常的卡。
