@@ -111,3 +111,16 @@ module.exports = {
 </body>
 </html>
 ```
+
+
+## 二、ProtoBuf.js又怎么用呢?
+
+ProtoBuf.js用起来就比较方法了.
+
+> 1、下载ProtoBuf.js库
+ 
+ ProtoBuf.js库在这里： https://github.com/dcodeIO/ProtoBuf.js 
+
+ 官网在这里http://dcode.io/protobuf.js/
+
+ 具体怎么用这个就不用多说了，上面的文档写的很清楚也很简单
