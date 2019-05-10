@@ -42,5 +42,5 @@ stat /home/user/.docker/config.json: permission denied
 
 ```shell
 $ sudo chown "$USER":"$USER" /home/"$USER"/.docker -R
-$ sudo chmod g+rwx "$HOME/.docker" -R
+$ sudo chmod g+rwx "$HOME/.docker" -R配置Docker以在启动时启动
 ```
