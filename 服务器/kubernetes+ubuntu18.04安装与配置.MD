@@ -314,3 +314,43 @@ $ kubectl get nodes
 ```shell
 scp ~/.kube/config root@192.168.18.131:~/.kube/config
 ```
+
+
+## 安装 Kubernetes Dashboard
+
+想知道有什么版本可以安装的话，你可以访问 https://github.com/kubernetes/dashboard 查看
+
+```shell
+
+$ kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v1.10.1/src/deploy/recommended/kubernetes-dashboard.yaml
+
+```
+
+安装的过程中可能出现无法完成的情况，查看状态:
+
+```shell
+$ kubectl get pod -n kube-system -o wide
+$ kubectl -n kube-system describe pod dashboard-xxxxxxx # 查更多信息
+```
+
+你会发现对应Pod状态为，ContainerCreating,出现这个问题是在于我们的网络无法访问到k8s.gcr.io 所以还是只有使用老办法解决，在从国内镜像中下载对应镜像文件:
+
+```shell
+$ docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/kubernetes-dashboard-amd64:v1.10.1
+$ docker tag registry.cn-hangzhou.aliyuncs.com/google_containers/kubernetes-dashboard-amd64:v1.10.1 k8s.gcr.io/kubernetes-dashboard-amd64:v1.10.1
+```
+
+这样就解决，如果你还有其它pod也出现这个问题，你可以在对应节点上查看日志：
+```shell
+$ journalctl -f -u kubelet
+```
+
+看看他到底需要下载什么东西，你在国内镜像中去下载，然后标记一下就好了。
+
+通过 kubectl proxy 访问 dashboard
+
+```shell
+$ kubectl proxy --address='172.20.0.113' --port=8086 --accept-hosts='^*$'
+```
+
+需要指定 --accept-hosts 选项，否则浏览器访问 dashboard 页面时提示 “Unauthorized”；
