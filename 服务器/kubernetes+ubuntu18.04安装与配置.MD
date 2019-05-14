@@ -283,3 +283,34 @@ taint "node-role.kubernetes.io/master:" not found
 taint "node-role.kubernetes.io/master:" not found
 taint "node-role.kubernetes.io/master:" not found
 ```
+
+终于安装完成，可是我发现的只有master节点是ready的，其它子节点全部是NotReady,于是在网上找了找解决方案：
+
+在子节点上查找日志：
+
+```shell
+$ journalctl -f -u kubelet
+```
+
+发现在错误信息:
+
+```shell
+KubeletNotReady runtime network not ready: NetworkReady=false reason:NetworkPluginNotReady message:docker: network plugin is not ready: cni config uninitialized
+```
+
+这是说kubelet配置了network-plugin=cni,但是还没安装，所以状态会是NotReady.解决这个问题我们需要去掉 network-plugin=cni
+
+网上有些大神说的这去掉 /etc/systemd/system/kubelet.service.d/10-kubeadm.conf 最后一行里的$KUBELET_NETWORK_ARGS, 这可能是以前有老版本才有这个了，新版本里面没有这东西。
+
+在新版本里面这东西在 /var/lib/kubelet/kubeadm-flags.env 中，去掉配置里面 --network-plugin=cni OK这样就好了，现在重启kubelet 就好了
+
+```shell
+$ sudo service kubelet restart
+$ kubectl get nodes
+```
+
+在子节点里面执行 kubectl get nodes，报错说什么localhost:8080无法访或者说什么证书错误，只需要将master节点的~/.kube/config 文件复制到节点的~/.kube/config就可以解决这些问题
+
+```shell
+scp ~/.kube/config root@192.168.18.131:~/.kube/config
+```
