@@ -354,3 +354,26 @@ $ kubectl proxy --address='172.20.0.113' --port=8086 --accept-hosts='^*$'
 ```
 
 需要指定 --accept-hosts 选项，否则浏览器访问 dashboard 页面时提示 “Unauthorized”；
+
+这里有个插曲让我非常郁闷，本想根据上面的设置我就可以访问dashboard了，是的我通过：
+
+```shell
+http://172.20.0.113:8086/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/
+```
+
+我通过这个地址是看到通过控制台的大门了，有两个方式登录，看了半天文档觉得还是Token方便些，于是我根据文档生成了Token，但是输入点登录按钮后一点反应都没有。
+
+查了半天文档才发现这个东西1.7.X以上不支持这样访问，只能通过localhost:8001方式我也醉了，还好我的虚拟机是Ubuntu的桌面版，我到虚拟上去访问真的成功了。
+
+我要是在云上部署我怎么访问了，于是在文档中发现可以通过nodePort方式进行访问。但是我设置后，怎么也访问不了，文档说的要根据master上面证书来生成一个p12证书
+
+也生成了并导入了浏览器，还是访问不了。查了一大堆文档没法解决，突然看一位大神说了句请用firefox访问，我用的chrome 感觉也差不多呀。抱着试试的心态试了下。
+
+还真能访问了，我吐。是因为chrome这类浏览发现证书错误就禁止访问了没有继续的可能，但是firefox还可点接受继续访问。难怪了必须firefox才行。后面我想了想可能是我证书
+
+没有弄对吧。先用firefox玩玩，后面再来解决这个证书问题。
+
+关于访问Dashborad文档： https://github.com/kubernetes/dashboard/wiki/Accessing-Dashboard---1.7.X-and-above
+
+关于Token生成的文档：https://github.com/kubernetes/dashboard/wiki/Creating-sample-user
+
