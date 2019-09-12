@@ -1,0 +1,17 @@
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+    k8s-app: jenkins
+  name: jenkins
+spec:
+  type: NodePort
+  ports:
+    - port: 8080
+      name: web
+      targetPort: 8080
+    - port: 50000
+      name: agent
+      targetPort: 50000
+  selector:
+    k8s-app: jenkins

@@ -377,3 +377,53 @@ http://172.20.0.113:8086/api/v1/namespaces/kube-system/services/https:kubernetes
 
 关于Token生成的文档：https://github.com/kubernetes/dashboard/wiki/Creating-sample-user
 
+关于Dashboard访问权限设置: https://github.com/kubernetes/dashboard/wiki/Access-control#admin-privileges
+
+# 安装和维护过程的一些问题处理
+
+> 1. 访问 dashboard 时出现无法访问提示指定端口不能访问.
+
+```js
+Error: 'dial tcp 172.17.0.2:8443: connect: connection refused'
+Trying to reach: 'https://172.17.0.2:8443/'
+```
+
+首先通过查看日志方法,查看dashboard POD的运行情况
+```sh
+$ kubectl -n kube-system logs --tail=100 kubernetes-dashboard-5f7b999d65-s2fwq | less
+```
+
+发现这个POD在不停的报错：
+```js
+Metric client health check failed: the server could not find the requested resource (get services heapster). Retrying in 30 seconds.
+```
+
+这是因为支持Heapster造成的,我们安装 一下就好了 。首先下载heapster.然后在目录外执行：
+```sh
+$ sudo kubectl create -f heapster-1.5.4/deploy/kube-config/influxdb
+
+$ sudo kubectl get pod -n kube-system -o wide
+```
+
+```code
+NAME                                    READY   STATUS    RESTARTS   AGE   IP              NODE                   NOMINATED NODE   READINESS GATES
+canal-bnfdr                             3/3     Running   0          63m   192.168.31.20   randyma-k8s            <none>           <none>
+canal-jznzs                             3/3     Running   0          63m   192.168.31.22   randyma-docker-node2   <none>           <none>
+canal-k846k                             3/3     Running   0          63m   192.168.31.21   randyma-docker-node1   <none>           <none>
+canal-kxxlg                             3/3     Running   0          63m   192.168.31.23   randyma-docker-node3   <none>           <none>
+coredns-fb8b8dccf-ntd4z                 1/1     Running   0          18h   172.17.0.2      randyma-k8s            <none>           <none>
+coredns-fb8b8dccf-wscjt                 1/1     Running   0          18h   172.17.0.3      randyma-k8s            <none>           <none>
+etcd-randyma-k8s                        1/1     Running   0          18h   192.168.31.20   randyma-k8s            <none>           <none>
+heapster-54d45cc6b-z6zgz                1/1     Running   0          91s   172.17.0.3      randyma-docker-node1   <none>           <none>
+kube-apiserver-randyma-k8s              1/1     Running   0          18h   192.168.31.20   randyma-k8s            <none>           <none>
+kube-controller-manager-randyma-k8s     1/1     Running   0          18h   192.168.31.20   randyma-k8s            <none>           <none>
+kube-proxy-dw4fm                        1/1     Running   0          18h   192.168.31.20   randyma-k8s            <none>           <none>
+kube-proxy-mdmwt                        1/1     Running   0          18h   192.168.31.22   randyma-docker-node2   <none>           <none>
+kube-proxy-x7ksg                        1/1     Running   0          18h   192.168.31.23   randyma-docker-node3   <none>           <none>
+kube-proxy-zpgdd                        1/1     Running   0          18h   192.168.31.21   randyma-docker-node1   <none>           <none>
+kube-scheduler-randyma-k8s              1/1     Running   0          18h   192.168.31.20   randyma-k8s            <none>           <none>
+kubernetes-dashboard-5f7b999d65-s2fwq   1/1     Running   0          60m   172.17.0.2      randyma-docker-node1   <none>           <none>
+monitoring-grafana-59d85ddc6-vjx84      1/1     Running   0          92s   172.17.0.2      randyma-docker-node2   <none>           <none>
+monitoring-influxdb-5fffc746fd-rq9qd    1/1     Running   0          92s   172.17.0.2      randyma-docker-node3   <none>           <none>
+
+```
