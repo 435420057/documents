@@ -81,7 +81,21 @@ $ sudo service vsftpd restart
 最后添加
 
 ```bash
-pasv_promiscuous=YES
+allow_writeable_chroot=YES
+seccomp_sandbox=NO
+pasv_enable=YES
+pasv_min_port=50001
+pasv_max_port=50010
+user_config_dir=/data/ftp
+```
+
+然后在/data/ftp 目录建立对应的帐户文件如:
+
+vim /data/ftp/xuezhan
+
+写入
+```shell
+local_root=/data/web
 ```
 
 然后再重启vsftpd服务。
