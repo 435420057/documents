@@ -65,6 +65,10 @@
 
 UUID=b543f8f7-579c-45b5-96d6-31de6fa1a55e /home/lgd/disk1 ext4 defaults 1 2
 
+```shell
+/dev/vdb1       /data           ext4    defaults                 1       2
+```
+
 共6个字段分别代表
 
 分区设备文件名或UUID
