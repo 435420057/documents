@@ -71,3 +71,19 @@ rmdir c:\opencv\opencv_contrib-4.4.0 /s /q
 脚本成功运行，表示安装成功
 
 然后将:C:\opencv\build\install\x64\mingw\bin 加入环境变量中。结束 
+
+
+## 解决在编译过程可能遇到的问题
+
+### 1、编译OpenCV提示opencv_contrib缺少boostdesc_bgm.i等文件
+
+错误提示：
+```sh
+~/opencv_contrib/modules/xfeatures2d/src/boostdesc.cpp:673:20: fatal error: boostdesc_bgm.i: No such file or directory
+```
+
+查看 build 文件夹下的日志文件 CMakeDownloadLog.txt，在日志文件CMakeDownloadLog.txt中搜索 boostdesc_bgm.i 关键词。日志文件里就有它的下载地址，到指定位置下载即可。https://github.com/opencv/opencv_contrib/issues/1301，点开上面这个网址往下拉，有人提供了缺失的各个文件的链接，点击保存. 或者直接在这个网页里搜索 BenbenIO 这个用户的回答。
+
+或者到本文提供的下载镜像去下载：<a href="https://files-cdn.cnblogs.com/files/arxive/boostdesc_bgm.i,vgg_generated_48.i%E7%AD%89.rar">boostdesc_bgm.i,vgg_generated_48.i等.rar</a>
+
+下载后，直接拷贝源码并生存同名文件，放在 opencv_contrib/modules/xfeatures2d/src/ 路径下即可。
