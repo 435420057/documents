@@ -1,0 +1,21 @@
+version: '3.6'
+services:
+  web:
+    image: 'gitlab/gitlab-ee:latest'
+    restart: always
+    hostname: '192.168.0.121'
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'http://192.168.0.121'
+        gitlab_rails['gitlab_shell_ssh_port'] = 19922
+        # Add any other gitlab.rb configuration here, each on its own line
+    ports:
+      - '19980:80'
+      - '19922:22'
+    volumes:
+      - 'd:/gitlab-ee/config:/etc/gitlab'
+      - 'd:/gitlab-ee/logs:/var/log/gitlab'
+      - 'd:/gitlab-ee/data:/var/opt/gitlab'
+    shm_size: '4096m'
+
+

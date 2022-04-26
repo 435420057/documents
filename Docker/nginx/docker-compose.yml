@@ -1,0 +1,14 @@
+version: '1.0'
+services:
+  web:
+    image: 'nginx:latest'
+    restart: always
+    hostname: '192.168.0.121'
+    ports:
+      - '27531:80'
+    volumes:
+      - 'd:/nginx/www:/usr/share/nginx/html'
+      - 'd:/nginx/conf:/etc/nginx/conf'
+      - 'd:/nginx/logs:/var/log/nginx nginx'
+
+
